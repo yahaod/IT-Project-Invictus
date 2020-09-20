@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <title>upload image</title>
+    <link rel='stylesheet' href ='https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.css' >
+  </head>
+  <body>
+    <section class = 'ui two column center aligned grid' id = 'file-view'>
+      <div class="column ui secondary segment">
+        <form class="ui form">
+          <div class="field">
+            <input type = 'file' onchange="chooseFile(event)"/>
+          </div>
+          <div class="ui fuild teal submit button" onclick='UploadButtonPressed()'>Upload</div>
+        </form>
+      </div>
+    </section>
+
+
+    <section class = "ui two column center aligned grid" id = 'profile-view'>
+      <div class="column ui segment">
+        <img src = 'http://via.placeholder.com/150' class="ui image centered" id = 'img'>
+      </div>
+    </section>
+
+
+    <section class = 'ui two column center aligned grid' id = 'text-view'>
+      <div class="column ui secondary segment">
+        <form class="ui form">
+          <div class="field">
+            <input type="text"  placeholder="personal information", id="personal-introduction">
+          </div>
+            <div class="ui fuild teal submit button" onclick='SubmitButtonPressed()'>Submit</div>
+        </form>
+      </div>
+    </section>
+
+    <section class = "ui two column center aligned grid" id = 'text-show'>
+      <div class="column ui segment">
+        <p> INFO: <strong id = 'info-show'></strong></p>
+      </div>
+    </section>
+
+
+    <section class = 'ui two column center aligned grid' id = 'file2-view'>
+      <div class="column ui secondary segment">
+        <form class="ui form">
+          <div class="field">
+            <input type = 'file' onchange="chooseFile(event)"/>
+          </div>
+          <div class="ui fuild teal submit button" onclick='UploadpdfButtonPressed()'>Upload</div>
+        </form>
+      </div>
+    </section>
+
+
+    <section class = "ui two column center aligned grid" id = 'pdf-view'>
+      <div class="column ui segment">
+        <iframe src="http://docs.google.com/gview?url=http://path.com/to/your/pdf.pdf&embedded=true" id = "pdf"
+style="width:600px; height:500px;" frameborder="0"></iframe>
+      </div>
+    </section>
+
+
+
+    <!-- FireBase set up -->
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+         https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-analytics.js"></script>
+
+
+    <script src="./upload.js"></script>
+
+  </body>
+</html>
