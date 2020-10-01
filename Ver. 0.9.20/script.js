@@ -1,4 +1,3 @@
-
 /*
     Logic：
         主要采用原生 JavaScript，
@@ -11,94 +10,120 @@
     ===
 */
 
-
 // 封装选择器, 采用ES6箭头函数写法
 const getSelector = ele => {
-    return typeof ele === "string" ? document.querySelector(ele) : "";
-}
-
+  return typeof ele === "string" ? document.querySelector(ele) : "";
+};
 
 // 登录注册载入
 
 const containerShow = () => {
-    var show = getSelector(".container")
-    show.className += " container-show"
-}
-
+  var show = getSelector(".container");
+  show.className += " container-show";
+};
 
 window.onload = containerShow;
 
-
 // 登录注册页切换
 ((window, document) => {
+  // 登录 -> 注册
+  let toSignBtn = getSelector(".toSign"),
+    toLoginBtn = getSelector(".toLogin");
+  (loginBox = getSelector(".login-box")), (signBox = getSelector(".sign-box"));
 
-    // 登录 -> 注册
-    let toSignBtn = getSelector(".toSign"),
-        toLoginBtn = getSelector(".toLogin")
-        loginBox = getSelector(".login-box"),
-        signBox = getSelector(".sign-box");
+  toSignBtn.onclick = () => {
+    loginBox.className += " animate_login";
+    signBox.className += " animate_sign";
+  };
 
-    toSignBtn.onclick = () => {
-        loginBox.className += ' animate_login';
-        signBox.className += ' animate_sign';
-    }
-
-    toLoginBtn.onclick = () => {
-        loginBox.classList.remove("animate_login");
-        signBox.classList.remove("animate_sign");
-    }
-
-
+  toLoginBtn.onclick = () => {
+    loginBox.classList.remove("animate_login");
+    signBox.classList.remove("animate_sign");
+  };
 })(window, document);
 
 // Ajax 请求发送
 
-
-
-function signUp(){
-
-  const userEmail = document.getElementById('sign-user').value;
-  const userPass = document.getElementById('sign-password').value;
-//  window.alert(userEmail + '  ' + userPass);
+function signUp() {
+  const userEmail = document.getElementById("sign-user").value;
+  const userPass = document.getElementById("sign-password").value;
+  //  window.alert(userEmail + '  ' + userPass);
   // 去掉此处//可以redirect 到 main page
 
   //window.location.href = "index2.html";
   //window.location.replace("http://www.baidu.com");
 
-  firebase.auth().createUserWithEmailAndPassword(userEmail, userPass).then(function(){
-    window.alert("Your account has been created, remember to verify your email.");
-    verifyEmail();
-    //window.location.href = "home.html";
+  //call the cloudfunctions
+  console.log(userEmail, userPass);
 
-  })
-  .catch(function(error) {
-    // Handle Errors here.
-    var errorCode = error.code;
-    var errorMessage = error.message;
-    window.alert(errorMessage);
-    // ...
+  const newUserData = {
+    email: userEmail,
+    password: userPass,
+    confirmPassword: userPass,
+    handle: userEmail
+  };
+
+  $.ajax({
+    url: "https://us-central1-eportfolio-74c20.cloudfunctions.net/api/signup",
+    xhrFields: {
+      withCredentials: true
+    },
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    crossDomain: true,
+    type: "POST",
+    data: newUserData,
+    dataType: "json",
+    success: function(data) {
+        
+        console.log(data);
+        firebase
+          .auth()
+          .createUserWithEmailAndPassword(userEmail, userPass)
+          .then(function() {
+            window.alert(
+              `Your account ${userEmail} has been created, remember to verify your email.`
+            );
+            verifyEmail();
+            //window.location.href = "home.html";
+          })
+          .catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            window.alert(errorMessage);
+            // ...
+          });
+    },
+    error: function(err) {
+      console.log(err.statusText);
+      console.log("error");
+    }
   });
 
-  }
 
-function login(){
+}
 
-  const userEmail = document.getElementById('login-user').value;
-  const userPass = document.getElementById('login-password').value;
-  firebase.auth().signInWithEmailAndPassword(userEmail, userPass).then(function(){
-  //Succesful, do whatever you want in your page
-  console.log("redirect");
-  //window.location.href = "index2.html";
-  window.alert("Welcome  " + userEmail );
-
-})
-.catch(function(error) {
-    // Handle Errors here.
-    var errorCode = error.code;
-    var errorMessage = error.message;
-    window.alert(errorMessage);
-    // ...
-  });
+function login() {
+  const userEmail = document.getElementById("login-user").value;
+  const userPass = document.getElementById("login-password").value;
+  firebase
+    .auth()
+    .signInWithEmailAndPassword(userEmail, userPass)
+    .then(function() {
+      //Succesful, do whatever you want in your page
+      console.log("redirect");
+      //window.location.href = "index2.html";
+      window.alert("Welcome  " + userEmail);
+    })
+    .catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      window.alert(errorMessage);
+      // ...
+    });
   //Handle Account Status
   /*
   firebase.auth().onAuthStateChanged(use = {
@@ -112,76 +137,97 @@ function login(){
   //window.location.href = "index2.html";
   //window.alert("Loged In");
 }
-function resetPass(){
-  var emailAddress = document.getElementById('login-user').value;
+function resetPass() {
+  var emailAddress = document.getElementById("login-user").value;
 
-  firebase.auth().sendPasswordResetEmail(emailAddress).then(function() {
-    window.alert("Please check your email to reset Password");
-  }).catch(function(error) {
-    var errorCode = error.code;
-    var errorMessage = error.message;
-    window.alert(errorMessage);
-  });
+  firebase
+    .auth()
+    .sendPasswordResetEmail(emailAddress)
+    .then(function() {
+      window.alert("Please check your email to reset Password");
+    })
+    .catch(function(error) {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      window.alert(errorMessage);
+    });
 }
 
- function logOut(){
-     firebase.auth().signOut().then(function() {
-    window.alert("Sign out successful");
-  }).catch(function(error) {
-    var errorCode = error.code;
-    var errorMessage = error.message;
-    window.alert(errorMessage);
-  });
- }
-
- function verifyEmail(){
-   //window.location.href = "index2.html";
-   //window.alert("Loged In");
-   var user = firebase.auth().currentUser;
-
-   user.sendEmailVerification().then(function() {
- // Email sent.
-   }).catch(function(error) {
-     var emailerrorCode = error.code;
-     var emailerrorMessage = error.message;
-     window.alert(emailerrorMessage);
-   });
- }
-
-
- function update(){
-   //verifyEmail();
-   var firstname = document.getElementById('user_first').value;
-   var lastname = document.getElementById('user_last').value;
-   //window.alert( "Welcome, "+firstname +" " + lastname);
-   var rootRef = firebase.database().ref().child("Users");
-   //window.alert("Database1");
-   var userId = firebase.auth().currentUser.uid;
-   //window.alert("Database2");
-   var usersRef = rootRef.child(userId);
-   //window.alert("Database3");
-
-   if(firstname != "" && lastname != ""){
-     var userData ={
-       "First_Name":firstname,
-       "Last_Name":lastname,
-     };
-     //window.alert("If");
-     usersRef.set(userData, function(error)
-     {
-       //window.alert("Set");
-       if(error){
-         var errorCode = error.code;
-         var errorMessage = error.message;
-         window.alert(errorMessage);
-       }
-       else{
-         //window.alert("If");
-         window.location.href = "home.html";
-       }
+function logOut() {
+  firebase
+    .auth()
+    .signOut()
+    .then(function() {
+      window.alert("Sign out successful");
+    })
+    .catch(function(error) {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      window.alert(errorMessage);
     });
+}
 
- }else{
-   window.alert("Form is incomplete.");
- }
+function verifyEmail() {
+  //window.location.href = "index2.html";
+  //window.alert("Loged In");
+  var user = firebase.auth().currentUser;
+
+  user
+    .sendEmailVerification()
+    .then(function() {
+      // Email sent.
+    })
+    .catch(function(error) {
+      var emailerrorCode = error.code;
+      var emailerrorMessage = error.message;
+      window.alert(emailerrorMessage);
+    });
+}
+
+function update() {
+  //verifyEmail();
+  var firstname = document.getElementById("user_first").value;
+  var lastname = document.getElementById("user_last").value;
+  var country = document.getElementById("user_country").value;
+  var city = document.getElementById("user_city").value;
+  var university = document.getElementById("user_university").value;
+  var faculty = document.getElementById("user_faculty").value;
+  var job = document.getElementById("user_job").value;
+  //window.alert( "Welcome, "+firstname +" " + lastname);
+  var rootRef = firebase
+    .database()
+    .ref()
+    .child("Users");
+  //window.alert("Database1");
+  var userId = firebase.auth().currentUser.uid;
+  //window.alert("Database2");
+  var usersRef = rootRef.child(userId);
+  //window.alert("Database3");
+
+  if (firstname != "" && lastname != "") {
+    var userData = {
+      First_Name: firstname,
+      Last_Name: lastname,
+      Country: country,
+      City: city,
+      University: university,
+      Faculty: faculty,
+      Occupation: job
+    };
+    //window.alert("If");
+    usersRef.set(userData, function(error) {
+      //window.alert("Set");
+      if (error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        window.alert(errorMessage);
+      } else {
+        //window.alert("If");
+        window.location.href = "home.html";
+      }
+    });
+  } else {
+    window.alert("Form is incomplete.");
+  }
+
 }
