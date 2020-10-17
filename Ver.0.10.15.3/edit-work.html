@@ -55,7 +55,7 @@
                     <div class="column ui secondary segment">
                       <form class="ui form">
                         <div class="field">
-                          <input type = 'file' onchange="chooseFile(event)"/>
+                          <input type = 'file' style='display:none' onchange="choosePDFFile(event)"/>
                         </div>
 
                       </form>
@@ -72,9 +72,9 @@
 
 
                 <span style="position:absolute; right:50px; bottom:50px;">
-                  <div href="javascript:location.reload();" class="ui fuild teal submit button" onclick='UploadpdfButtonPressed();setTimeout(location.reload.bind(location), 10000)'>Upload</div>
-                  <a href="edit-skill.html" class="button">Previous</a>
-                  <a href="aboutme-page.html" class="button">Submit</a>
+                <input type='file' id='pdfInput' style='display:none' onchange="choosePDFFile(event)" />
+                <a href="#" class="ui fuild teal submit button" onclick='handleEditPdf();'>Upload PDF</a>
+                <a href="aboutme-page.html" class="button">Submit</a>
                 </div>
             </section>
 
