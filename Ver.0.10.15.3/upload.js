@@ -33,10 +33,27 @@ pdf = document.getElementById('pdf');
 
 let file = {};
 
-function chooseFile(e){
+function chooseFile(e) {
   file = e.target.files[0];
+  UploadButtonPressed();
+  setTimeout(function(){location.reload()},3000);
 }
 
+function choosePDFFile(e) {
+    file = e.target.files[0];
+    UploadpdfButtonPressed();
+    setTimeout(function(){location.reload()},10000);
+}
+
+function handleEditPicture() {
+  const fileInput = document.getElementById("imageInput");
+  fileInput.click();
+}
+
+function handleEditPdf() {
+    const fileInput = document.getElementById("pdfInput");
+    fileInput.click();
+}
 
 
 function UploadButtonPressed(){
