@@ -69,7 +69,7 @@
                     <div class="column ui secondary segment">
                       <form class="ui form">
                         <div class="field">
-                          <input type = 'file' onchange="chooseFile(event)"/>
+                          <input type = 'file' id='imageInput' style='display:none' onchange="chooseFile(event)"/>
                         </div>
 
                       </form>
@@ -79,7 +79,8 @@
                 </div>
 
                 <span style="position:absolute; right:50px; bottom:50px;">
-                <a class="button"onclick='UploadButtonPressed();setTimeout(location.reload.bind(location), 2000)' >Upload</a>
+                <input type = 'file' id='imageInput' style='display:none' onchange="chooseFile(event)">
+                <a href="#" class="button" onclick='handleEditPicture();' >Upload Image</a>
                 <a href="edit-about.html" class="button">Next</a>
 
             </section>
